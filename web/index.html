@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>碎纸相簿 · 邮件减负</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="/web/styles.css" />
+  </head>
+  <body>
+    <div id="app">
+      <header class="topbar">
+        <div class="brand">
+          <h1>碎纸相簿</h1>
+          <p id="account-label">加载中…</p>
+        </div>
+        <div class="account-switch" role="tablist">
+          <button type="button" data-account="qq" class="active">QQ</button>
+          <button type="button" data-account="163">163</button>
+        </div>
+        <button type="button" class="btn btn-ghost btn-refresh" id="btn-sync" title="从邮箱同步，移除已在网页删掉的邮件">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <path d="M21 12a9 9 0 11-2.64-6.36"/><polyline points="21 3 21 9 15 9"/>
+          </svg>
+          同步邮箱
+        </button>
+        <div class="stats-pills" id="stats-pills"></div>
+      </header>
+
+      <main id="lanes" class="lanes">
+        <div class="loading-screen" id="loading">正在整理相簿…</div>
+      </main>
+
+      <div class="fab-dock hidden" id="fab">
+        <button type="button" class="fab-count-btn" id="btn-show-marked" aria-expanded="false">
+          <span class="fab-count-num" id="fab-count-num">0</span>
+          <span class="fab-count-label">封待删除</span>
+          <svg class="fab-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="fab-actions">
+          <button type="button" class="btn btn-ghost btn-sm" id="btn-clear-marks">清空</button>
+          <button type="button" class="btn btn-danger btn-sm" id="btn-execute-delete">删除</button>
+        </div>
+      </div>
+
+      <div class="marked-sheet hidden" id="marked-sheet" aria-hidden="true">
+        <div class="marked-sheet-backdrop" id="marked-sheet-backdrop"></div>
+        <div class="marked-sheet-panel">
+          <div class="marked-sheet-head">
+            <div>
+              <h3>待删除清单</h3>
+              <p id="marked-sheet-sub">共 0 封</p>
+            </div>
+            <button type="button" class="btn btn-ghost btn-sm" id="marked-sheet-close">关闭</button>
+          </div>
+          <div class="marked-sheet-list" id="marked-sheet-list"></div>
+          <div class="marked-sheet-foot">
+            <button type="button" class="btn btn-ghost" id="btn-export-delete">导出清单</button>
+            <button type="button" class="btn btn-danger" id="btn-execute-delete-sheet">删除全部</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="lightbox" id="lightbox" aria-hidden="true">
+      <div class="lightbox-head">
+        <div>
+          <h2 id="lb-title">相簿</h2>
+          <p id="lb-sub" style="margin:0.25rem 0 0;font-size:0.8rem;color:#a1a1aa"></p>
+        </div>
+        <div class="lightbox-actions">
+          <button type="button" class="btn btn-ghost" id="lb-mark-all-delete">整册标记</button>
+          <button type="button" class="btn btn-danger" id="lb-delete-album">整册删除</button>
+          <button type="button" class="btn btn-ghost" id="lb-close">关闭</button>
+        </div>
+      </div>
+      <div class="card-grid" id="card-grid"></div>
+    </div>
+
+    <div class="detail-backdrop" id="detail-backdrop" aria-hidden="true"></div>
+
+    <aside class="detail-panel" id="detail-panel">
+      <div class="lightbox-head">
+        <h2 id="detail-title">邮件</h2>
+        <button type="button" class="btn btn-ghost" id="detail-close">关闭</button>
+      </div>
+      <div class="detail-body" id="detail-body"></div>
+    </aside>
+
+    <div class="confirm-modal hidden" id="confirm-modal" role="dialog" aria-modal="true" aria-labelledby="confirm-title">
+      <div class="confirm-backdrop" data-confirm-cancel></div>
+      <div class="confirm-card">
+        <div class="confirm-icon" aria-hidden="true">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="3 6 5 6 21 6"/>
+            <path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"/>
+            <line x1="10" y1="11" x2="10" y2="17"/>
+            <line x1="14" y1="11" x2="14" y2="17"/>
+          </svg>
+        </div>
+        <h3 id="confirm-title" class="confirm-title">确认删除</h3>
+        <p id="confirm-message" class="confirm-message"></p>
+        <p class="confirm-hint">删除后将从邮箱移除，本地缓存也会同步清除。</p>
+        <div class="confirm-actions">
+          <button type="button" class="btn btn-ghost" data-confirm-cancel>取消</button>
+          <button type="button" class="btn btn-danger" id="confirm-ok">确认删除</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="toast hidden" id="toast"></div>
+    <div class="loading-overlay hidden" id="loading-overlay">
+      <div class="spinner"></div>
+      <p id="loading-msg">删除中…</p>
+    </div>
+
+    <script src="/web/app.js" type="module"></script>
+  </body>
+</html>

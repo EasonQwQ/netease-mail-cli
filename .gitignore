@@ -1,0 +1,21 @@
+node_modules/
+dist/
+
+# Secrets & local config
+.env
+.env.*
+!.env.example
+
+# Local mail cache (never commit real exports)
+data/*
+!data/.gitkeep
+
+# Logs & dev artifacts
+*.log
+qq-cleanup-log.txt
+.qq-ai-cleanup/
+.qq-ai-cleanup-state.json
+
+# OS / editor
+.DS_Store
+*.tsbuildinfo

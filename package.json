@@ -1,0 +1,50 @@
+{
+  "name": "netease-mail-cli",
+  "version": "0.1.0",
+  "description": "本地 163/QQ 邮箱导出、AI 分册与碎纸相簿式批量清理",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/EasonQwQ/netease-mail-cli.git"
+  },
+  "homepage": "https://github.com/EasonQwQ/netease-mail-cli#readme",
+  "bugs": {
+    "url": "https://github.com/EasonQwQ/netease-mail-cli/issues"
+  },
+  "type": "module",
+  "engines": {
+    "node": ">=18"
+  },
+  "keywords": [
+    "163",
+    "qq-mail",
+    "imap",
+    "email",
+    "mail-cleanup"
+  ],
+  "scripts": {
+    "list": "tsx src/cli.ts list",
+    "delete": "tsx src/cli.ts delete",
+    "export:mails": "tsx src/export-all-mails.ts",
+    "export:mails:qq": "tsx src/export-all-mails.ts --provider qq",
+    "export:bodies:qq": "tsx src/export-all-mails.ts --provider qq --bodies-only",
+    "export:bodies:163": "tsx src/export-all-mails.ts --provider 163 --bodies-only",
+    "build:album": "tsx src/build-album.ts",
+    "build:album:qq": "tsx src/build-album.ts --provider qq",
+    "build:album:163": "tsx src/build-album.ts --provider 163",
+    "mail:viewer": "tsx src/serve-viewer.ts",
+    "sync:qq": "tsx src/sync-cli.ts --provider qq",
+    "sync:163": "tsx src/sync-cli.ts --provider 163"
+  },
+  "dependencies": {
+    "dotenv": "^16.4.7",
+    "imapflow": "^1.0.188",
+    "mailparser": "^3.9.8"
+  },
+  "devDependencies": {
+    "@types/mailparser": "^3.4.6",
+    "@types/node": "^20.17.16",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.3"
+  }
+}
