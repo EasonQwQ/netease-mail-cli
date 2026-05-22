@@ -18,13 +18,9 @@
 
 ### 界面预览
 
-将截图放到 [`docs/images/`](docs/images/) 目录（见该目录下说明），文件名与下表一致后，GitHub 会自动展示：
-
 | 首页分册 | 邮件卡片墙 | 详情侧边栏 |
 |:---:|:---:|:---:|
 | ![碎纸相簿首页](docs/images/01-album-home.png) | ![邮件卡片墙](docs/images/02-album-cards.png) | ![详情侧边栏](docs/images/03-detail-sidebar.png) |
-
-> 若图片尚未放入，README 中会显示裂图；复制三张图到 `docs/images/` 并命名为 `01-album-home.png`、`02-album-cards.png`、`03-detail-sidebar.png` 即可。
 
 ---
 
